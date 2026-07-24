@@ -15,3 +15,4 @@ apps/api/venv/
 apps/api/__pycache__/
 apps/api/**/__pycache__/
 apps/api/.pytest_cache/
+apps/api/resumelint.db

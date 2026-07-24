@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 
+from src.api.routers import resumes
+
 app = FastAPI(
     title="ResumeLint API",
     description="Engineering-grade resume analysis API",
     version="0.1.0",
 )
+
+app.include_router(resumes.router)
 
 
 @app.get("/health")

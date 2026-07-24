@@ -30,7 +30,16 @@ def _iter_block_items(parent):
 def _extract_table_text(table: Table) -> list[str]:
     lines: list[str] = []
     for row in table.rows:
+        seen_cell_ids: set[int] = set()
         for cell in row.cells:
+            # Horizontally merged cells are returned once per spanned grid
+            # column by python-docx — dedupe by the underlying XML element
+            # so merged content is only extracted once.
+            cell_id = id(cell._tc)
+            if cell_id in seen_cell_ids:
+                continue
+            seen_cell_ids.add(cell_id)
+
             for block in _iter_block_items(cell):
                 if isinstance(block, Paragraph) and block.text.strip():
                     lines.append(block.text.strip())

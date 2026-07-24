@@ -11,3 +11,7 @@ venv/
 .DS_Store
 .turbo/
 *.log
+apps/api/venv/
+apps/api/__pycache__/
+apps/api/**/__pycache__/
+apps/api/.pytest_cache/

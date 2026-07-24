@@ -28,12 +28,25 @@ async def parse_resume(resume_id: str, db: AsyncSession) -> ResumeDocument:
         page_or_section_count=extraction.page_or_section_count,
     )
 
-    parsed = ParsedDocument(
-        resume_id=resume.id,
-        extracted_text=document.raw_text,
-        normalized_data=document.model_dump(),
+    # Idempotent: update existing ParsedDocument for this resume if present,
+    # otherwise create a new one. Re-parsing (e.g. after a bug fix, or user-
+    # triggered re-analysis) should never fail with a UNIQUE constraint error.
+    existing = await db.execute(
+        select(ParsedDocument).where(ParsedDocument.resume_id == resume.id)
     )
-    db.add(parsed)
+    parsed = existing.scalar_one_or_none()
+
+    if parsed is not None:
+        parsed.extracted_text = document.raw_text
+        parsed.normalized_data = document.model_dump()
+    else:
+        parsed = ParsedDocument(
+            resume_id=resume.id,
+            extracted_text=document.raw_text,
+            normalized_data=document.model_dump(),
+        )
+        db.add(parsed)
+
     await db.commit()
 
     return document

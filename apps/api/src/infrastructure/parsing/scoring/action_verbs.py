@@ -5,6 +5,12 @@ STRONG_ACTION_VERBS = {
     "coordinated", "published", "researched", "analyzed", "constructed",
     "spearheaded", "streamlined", "integrated", "authored", "founded",
     "trained", "mentored", "presented", "negotiated", "resolved", "scaled",
+    "prepared", "conducted", "collaborated", "executed", "organized",
+    "facilitated", "supervised", "directed", "planned", "initiated",
+    "generated", "produced", "enhanced", "expanded", "strengthened",
+    "identified", "evaluated", "assessed", "monitored", "tested",
+    "debugged", "refactored", "migrated", "configured", "maintained",
+    "supported", "contributed", "drove", "owned", "shipped",
 }
 
 WEAK_PHRASES = (

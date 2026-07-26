@@ -8,11 +8,29 @@ METRIC_RE = re.compile(
 )
 
 
+def _is_title_or_metadata_line(line: str) -> bool:
+    if " | " in line:
+        return True
+    # Tech-stack tag lines: short, comma-separated tokens, no sentence
+    # punctuation (e.g. "Python, PyTorch, FastAPI, React")
+    if "," in line and not line.rstrip().endswith((".", ")")):
+        tokens = [t.strip() for t in line.split(",")]
+        if all(len(t.split()) <= 3 for t in tokens) and len(line.split()) <= 12:
+            return True
+    return False
+
+
 def split_into_bullets(section_text: str) -> list[str]:
-    lines = [line.strip() for line in section_text.split("\n")]
-    # Treat lines with 5+ words as scoreable bullets/sentences; short lines
-    # (job titles, dates, tech-stack tags) aren't bullets and are skipped.
-    return [line for line in lines if len(line.split()) >= 5]
+    lines = [line.strip() for line in section_text.split("\n") if line.strip()]
+    bullets: list[str] = []
+    for line in lines:
+        content = line[1:].strip() if line.startswith("•") else line
+        if len(content.split()) < 5:
+            continue
+        if _is_title_or_metadata_line(content):
+            continue
+        bullets.append(content)
+    return bullets
 
 
 def analyze_bullet(bullet_text: str) -> dict:

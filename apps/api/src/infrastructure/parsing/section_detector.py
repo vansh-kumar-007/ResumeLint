@@ -61,4 +61,8 @@ def detect_sections(cleaned_text: str) -> dict[str, str]:
 
         sections[current_key].append(line)
 
-    return {key: "\n".join(content).strip() for key, content in sections.items() if "\n".join(content).strip()}
+    return {
+        key: "\n".join(content).strip()
+        for key, content in sections.items()
+        if "\n".join(content).strip()
+    }

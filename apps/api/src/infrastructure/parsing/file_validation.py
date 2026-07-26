@@ -23,14 +23,18 @@ def validate_file(filename: str, content: bytes) -> ValidationResult:
     if ext == ".pdf":
         if content.startswith(b"%PDF"):
             return ValidationResult(True, "application/pdf")
-        return ValidationResult(False, None, "File extension is .pdf but content doesn't match a PDF signature")
+        return ValidationResult(
+            False, None, "File extension is .pdf but content doesn't match a PDF signature"
+        )
 
     if ext == ".docx":
         if content.startswith(b"PK\x03\x04"):
             return ValidationResult(
                 True, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
-        return ValidationResult(False, None, "File extension is .docx but content doesn't match a DOCX/zip signature")
+        return ValidationResult(
+            False, None, "File extension is .docx but content doesn't match a DOCX/zip signature"
+        )
 
     if ext == ".txt":
         try:

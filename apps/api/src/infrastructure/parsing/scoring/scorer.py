@@ -1,9 +1,9 @@
 from src.infrastructure.parsing.scoring.bullet_analyzer import analyze_bullet, split_into_bullets
 from src.infrastructure.parsing.scoring.structural_checks import (
+    EXPERIENCE_LIKE_SECTIONS,
     check_contact_completeness,
     check_required_sections,
     check_resume_length,
-    EXPERIENCE_LIKE_SECTIONS,
 )
 
 WEIGHTS = {
@@ -46,7 +46,9 @@ def score_resume(contact_info: dict, sections: dict, word_count: int) -> dict:
 
     if not contact_info.get("email") and not contact_info.get("phone"):
         capped_overall = min(capped_overall, 50)
-        cap_reasons.append("Score capped at 50: no email or phone found — recruiters cannot contact this candidate")
+        cap_reasons.append(
+            "Score capped at 50: no email or phone found — recruiters cannot contact this candidate"
+        )
 
     if not all_bullets:
         capped_overall = min(capped_overall, 60)

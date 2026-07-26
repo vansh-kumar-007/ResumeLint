@@ -28,7 +28,9 @@ def extract_contact_info(header_text: str) -> dict[str, str | bool | None]:
         "phone": phone_match.group(0) if phone_match else None,
         "linkedin_url": find_url_for("linkedin"),
         "github_url": find_url_for("github"),
-        "portfolio_url": next((u for u in urls if "linkedin" not in u.lower() and "github" not in u.lower()), None),
+        "portfolio_url": next(
+        (u for u in urls if "linkedin" not in u.lower() and "github" not in u.lower()), None
+        ),
         "has_linkedin_mention": "linkedin" in lowered,
         "has_github_mention": "github" in lowered,
     }

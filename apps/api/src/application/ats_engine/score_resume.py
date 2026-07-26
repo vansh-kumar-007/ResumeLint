@@ -2,7 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.ats_engine.score_report import ScoreReport
-from src.infrastructure.db.models import ParsedDocument, ScoreReport as ScoreReportModel
+from src.infrastructure.db.models import ParsedDocument
+from src.infrastructure.db.models import ScoreReport as ScoreReportModel
 from src.infrastructure.parsing.scoring.scorer import score_resume as run_scoring
 
 

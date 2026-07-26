@@ -1,18 +1,18 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.schemas.analysis import AnalysisResponse
+from src.api.schemas.parsed_document import ParsedDocumentResponse
 from src.api.schemas.resume import ResumeUploadResponse
+from src.api.schemas.score_report import ScoreReportResponse
+from src.application.ats_engine.analyze_resume import analyze_resume
+from src.application.ats_engine.parse_resume import ResumeNotFoundError, parse_resume
+from src.application.ats_engine.score_resume import ParsedDocumentNotFoundError, score_resume
 from src.config.settings import settings
 from src.infrastructure.db.models import Resume
 from src.infrastructure.db.session import get_db
 from src.infrastructure.parsing.file_validation import validate_file
 from src.infrastructure.storage import storage_backend
-from src.api.schemas.parsed_document import ParsedDocumentResponse
-from src.application.ats_engine.parse_resume import ResumeNotFoundError, parse_resume
-from src.api.schemas.score_report import ScoreReportResponse
-from src.application.ats_engine.score_resume import ParsedDocumentNotFoundError, score_resume
-from src.api.schemas.analysis import AnalysisResponse
-from src.application.ats_engine.analyze_resume import analyze_resume
 
 router = APIRouter(prefix="/resumes", tags=["resumes"])
 

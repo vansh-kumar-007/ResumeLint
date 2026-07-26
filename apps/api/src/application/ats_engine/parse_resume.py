@@ -3,16 +3,19 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.ats_engine.resume_document import ResumeDocument
+from src.domain.ats_engine.parsed_resume import ContactInfo, ParsedResume
 from src.infrastructure.db.models import ParsedDocument, Resume
+from src.infrastructure.parsing.contact_extractor import extract_contact_info
 from src.infrastructure.parsing.extractor_factory import get_extractor
+from src.infrastructure.parsing.section_detector import detect_sections
+from src.infrastructure.parsing.text_cleaner import clean_text
 
 
 class ResumeNotFoundError(Exception):
     pass
 
 
-async def parse_resume(resume_id: str, db: AsyncSession) -> ResumeDocument:
+async def parse_resume(resume_id: str, db: AsyncSession) -> ParsedResume:
     result = await db.execute(select(Resume).where(Resume.id == resume_id))
     resume = result.scalar_one_or_none()
     if resume is None:
@@ -22,31 +25,34 @@ async def parse_resume(resume_id: str, db: AsyncSession) -> ResumeDocument:
     extractor = get_extractor(resume.mime_type)
     extraction = extractor.extract(content)
 
-    document = ResumeDocument(
-        raw_text=extraction.raw_text,
+    cleaned = clean_text(extraction.raw_text)
+    sections = detect_sections(cleaned)
+    contact_data = extract_contact_info(sections.get("header", ""))
+
+    parsed_resume = ParsedResume(
+        raw_text=cleaned,
         word_count=extraction.word_count,
         page_or_section_count=extraction.page_or_section_count,
+        contact_info=ContactInfo(**contact_data),
+        sections=sections,
     )
 
-    # Idempotent: update existing ParsedDocument for this resume if present,
-    # otherwise create a new one. Re-parsing (e.g. after a bug fix, or user-
-    # triggered re-analysis) should never fail with a UNIQUE constraint error.
     existing = await db.execute(
         select(ParsedDocument).where(ParsedDocument.resume_id == resume.id)
     )
     parsed = existing.scalar_one_or_none()
 
     if parsed is not None:
-        parsed.extracted_text = document.raw_text
-        parsed.normalized_data = document.model_dump()
+        parsed.extracted_text = parsed_resume.raw_text
+        parsed.normalized_data = parsed_resume.model_dump()
     else:
         parsed = ParsedDocument(
             resume_id=resume.id,
-            extracted_text=document.raw_text,
-            normalized_data=document.model_dump(),
+            extracted_text=parsed_resume.raw_text,
+            normalized_data=parsed_resume.model_dump(),
         )
         db.add(parsed)
 
     await db.commit()
 
-    return document
+    return parsed_resume

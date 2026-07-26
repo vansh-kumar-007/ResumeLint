@@ -44,12 +44,21 @@ def detect_sections(cleaned_text: str) -> dict[str, str]:
     lines = cleaned_text.split("\n")
     sections: dict[str, list[str]] = {"header": []}
     current_key = "header"
+    seen_first_content_line = False
 
     for line in lines:
+        # The first non-empty line is always the candidate's name, never a
+        # section title — even if it happens to be ALL CAPS (very common).
+        if not seen_first_content_line and line.strip():
+            sections["header"].append(line)
+            seen_first_content_line = True
+            continue
+
         if _is_header_line(line):
             current_key = _canonicalize(line)
             sections.setdefault(current_key, [])
             continue
+
         sections[current_key].append(line)
 
     return {key: "\n".join(content).strip() for key, content in sections.items() if "\n".join(content).strip()}

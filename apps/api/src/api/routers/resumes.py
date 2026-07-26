@@ -11,6 +11,8 @@ from src.api.schemas.parsed_document import ParsedDocumentResponse
 from src.application.ats_engine.parse_resume import ResumeNotFoundError, parse_resume
 from src.api.schemas.score_report import ScoreReportResponse
 from src.application.ats_engine.score_resume import ParsedDocumentNotFoundError, score_resume
+from src.api.schemas.analysis import AnalysisResponse
+from src.application.ats_engine.analyze_resume import analyze_resume
 
 router = APIRouter(prefix="/resumes", tags=["resumes"])
 
@@ -76,3 +78,14 @@ async def score_resume_endpoint(resume_id: str, db: AsyncSession = Depends(get_d
         raise HTTPException(status_code=422, detail=str(e))
 
     return report
+
+@router.post("/{resume_id}/analyze", response_model=AnalysisResponse)
+async def analyze_resume_endpoint(resume_id: str, db: AsyncSession = Depends(get_db)):
+    try:
+        result = await analyze_resume(resume_id, db)
+    except ResumeNotFoundError:
+        raise HTTPException(status_code=404, detail="Resume not found")
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    return result

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { uploadAndAnalyze, ApiError, type AnalysisResult } from "@/lib/api";
+import { uploadAndAnalyze, ApiError } from "@/lib/api";
+import { ReportView } from "@/components/report/ReportView";
+import type { AnalysisResult } from "@/types/analysis";
 
 const ACCEPTED_TYPES = [".pdf", ".docx", ".txt"];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
@@ -99,22 +101,7 @@ export default function HomePage() {
         <p className="text-[var(--color-diagnostic-red)]">{errorMessage}</p>
       )}
 
-      {result && (
-        <div className="w-full max-w-2xl bg-[var(--color-graphite)] border border-[var(--color-steel)] rounded-[var(--radius-sharp)] p-6">
-          <div className="flex items-baseline gap-3 mb-4">
-            <span className="text-4xl font-semibold text-[var(--color-diagnostic-green)]">
-              {result.overall_score}
-            </span>
-            <span className="text-[var(--color-muted)]">/ 100</span>
-          </div>
-          <p className="text-sm text-[var(--color-muted)] mb-4">
-            Full report UI coming next — here's the raw analysis for now:
-          </p>
-          <pre className="text-xs overflow-auto max-h-96 bg-[var(--color-charcoal)] p-4 rounded-[var(--radius-sharp)]">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </div>
-      )}
+      {result && <ReportView result={result} />}
     </main>
   );
 }

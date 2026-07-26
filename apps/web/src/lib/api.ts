@@ -1,15 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+import type { AnalysisResult } from "@/types/analysis";
 
-export interface AnalysisResult {
-  resume_id: string;
-  overall_score: number;
-  cap_reasons: string[];
-  section_scores: Record<string, unknown>;
-  bullet_analyses: Array<Record<string, unknown>>;
-  contact_info: Record<string, unknown>;
-  sections: Record<string, string>;
-  word_count: number;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
 
 export class ApiError extends Error {
   constructor(message: string, public status: number) {

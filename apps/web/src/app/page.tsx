@@ -51,6 +51,7 @@ export default function HomePage() {
 
   const onFileInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log("onFileInput fired, files:", e.target.files);
       const file = e.target.files?.[0];
       if (file) handleFile(file);
     },

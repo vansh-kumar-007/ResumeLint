@@ -3,10 +3,8 @@ import { SectionScoreBar } from "./SectionScoreBar";
 
 export function SectionScoresPanel({ scores }: { scores: SectionScores }) {
   return (
-    <div className="bg-[var(--color-graphite)] border border-[var(--color-steel)] rounded-[var(--radius-sharp)] p-6">
-      <h2 className="text-sm uppercase tracking-wide text-[var(--color-muted)] mb-2">
-        Section Breakdown
-      </h2>
+    <div className="neu-panel">
+      <h2 className="text-xs uppercase tracking-wider font-bold mb-2">Section Breakdown</h2>
       <SectionScoreBar label="Contact Info" score={scores.contact.score} issues={scores.contact.issues} />
       <SectionScoreBar
         label="Required Sections"

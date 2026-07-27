@@ -6,32 +6,22 @@ export function ContactCard({ contact }: { contact: ContactInfo }) {
     [User, "Name", contact.name],
     [Mail, "Email", contact.email],
     [Phone, "Phone", contact.phone],
-    [
-      Link2,
-      "LinkedIn",
-      contact.linkedin_url ?? (contact.has_linkedin_mention ? "mentioned, link not detected" : null),
-    ],
-    [
-      Link2,
-      "GitHub",
-      contact.github_url ?? (contact.has_github_mention ? "mentioned, link not detected" : null),
-    ],
+    [Link2, "LinkedIn", contact.linkedin_url ?? (contact.has_linkedin_mention ? "mentioned, link not detected" : null)],
+    [Link2, "GitHub", contact.github_url ?? (contact.has_github_mention ? "mentioned, link not detected" : null)],
   ];
 
   return (
-    <div className="bg-[var(--color-graphite)] border border-[var(--color-steel)] rounded-[var(--radius-sharp)] p-6">
-      <h2 className="text-xs uppercase tracking-wider text-[var(--color-muted)] mb-4">
-        Detected Contact Info
-      </h2>
+    <div className="neu-panel">
+      <h2 className="text-xs uppercase tracking-wider font-bold mb-4">Detected Contact Info</h2>
       <div className="space-y-2.5">
         {rows.map(([Icon, label, value]) => (
           <div key={label} className="flex items-center gap-3 text-sm">
-            <Icon size={15} className="text-[var(--color-muted)] flex-shrink-0" />
+            <Icon size={15} className="flex-shrink-0" />
             <span className="text-[var(--color-muted)] w-16 flex-shrink-0">{label}</span>
             {value ? (
-              <span className="truncate">{value}</span>
+              <span className="truncate font-mono">{value}</span>
             ) : (
-              <span className="flex items-center gap-1 text-[var(--color-diagnostic-red)]">
+              <span className="flex items-center gap-1 text-[var(--color-diagnostic-red)] font-bold">
                 <XCircle size={13} />
                 Not detected
               </span>

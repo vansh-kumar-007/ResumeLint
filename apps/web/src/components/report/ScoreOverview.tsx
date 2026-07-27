@@ -1,23 +1,15 @@
 import { AlertTriangle } from "lucide-react";
 import { ScoreRing } from "./ScoreRing";
 
-export function ScoreOverview({
-  score,
-  capReasons,
-}: {
-  score: number;
-  capReasons: string[];
-}) {
+export function ScoreOverview({ score, capReasons }: { score: number; capReasons: string[] }) {
   return (
-    <div className="bg-[var(--color-graphite)] border border-[var(--color-steel)] rounded-[var(--radius-sharp)] p-6 flex gap-6 items-center">
+    <div className="neu-panel flex gap-6 items-center">
       <ScoreRing score={score} />
       <div className="flex-1">
-        <h2 className="text-xs uppercase tracking-wider text-[var(--color-muted)] mb-2">
-          Overall Analysis
-        </h2>
+        <h2 className="text-xs uppercase tracking-wider font-bold mb-2">Overall Analysis</h2>
         {capReasons.length === 0 ? (
           <p className="text-sm text-[var(--color-muted)]">
-            No critical issues detected. See the breakdown below for detailed scoring.
+            No critical issues detected. See the breakdown below.
           </p>
         ) : (
           <div className="space-y-1.5">

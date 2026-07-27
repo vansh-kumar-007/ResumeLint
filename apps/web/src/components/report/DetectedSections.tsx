@@ -17,13 +17,13 @@ export function DetectedSections({ sections }: { sections: Record<string, string
   const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
-    <div className="bg-[var(--color-graphite)] border border-[var(--color-steel)] rounded-[var(--radius-sharp)] p-6">
-      <h2 className="text-sm uppercase tracking-wide text-[var(--color-muted)] mb-3">
+    <div className="neu-panel">
+      <h2 className="text-xs uppercase tracking-wider font-bold mb-3">
         Detected Sections ({Object.keys(sections).length})
       </h2>
       <div className="space-y-1">
         {Object.entries(sections).map(([key, content]) => (
-          <div key={key} className="border-b border-[var(--color-steel)] last:border-b-0">
+          <div key={key} className="border-b-2 border-[var(--color-border)] last:border-b-0">
             <button
               onClick={() => setOpenKey(openKey === key ? null : key)}
               className="w-full text-left py-2 text-sm flex justify-between items-center"

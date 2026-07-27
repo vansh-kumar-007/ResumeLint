@@ -31,3 +31,12 @@ def test_tech_stack_tag_lines_excluded():
     section = "Python, PyTorch, FastAPI, React\nBuilt a self-play RL simulation using Double DQN across 12 attack types."
     bullets = split_into_bullets(section)
     assert len(bullets) == 1
+    
+def test_merges_wrapped_continuation_lines():
+    section = (
+        "Conducted field-based environmental surveys across Delhi-NCR to map open waste burning and dumping hotspots, collecting GPS,\n"
+        "waste composition, and land-use data for air quality assessment."
+    )
+    bullets = split_into_bullets(section)
+    assert len(bullets) == 1
+    assert "collecting GPS, waste composition" in bullets[0]

@@ -21,10 +21,26 @@ def _is_title_or_metadata_line(line: str) -> bool:
 
 
 def split_into_bullets(section_text: str) -> list[str]:
-    lines = [line.strip() for line in section_text.split("\n") if line.strip()]
+    raw_lines = [line.strip() for line in section_text.split("\n") if line.strip()]
+
+    merged: list[str] = []
+    buffer = ""
+    for line in raw_lines:
+        clean_line = line[1:].strip() if line.startswith("•") else line
+        if not buffer:
+            buffer = clean_line
+        elif buffer[-1:] not in ".!?" and not _is_title_or_metadata_line(clean_line):
+            # Previous line didn't end a sentence — this line is a wrapped
+            # continuation of it, not a new bullet.
+            buffer = f"{buffer} {clean_line}"
+        else:
+            merged.append(buffer)
+            buffer = clean_line
+    if buffer:
+        merged.append(buffer)
+
     bullets: list[str] = []
-    for line in lines:
-        content = line[1:].strip() if line.startswith("•") else line
+    for content in merged:
         if len(content.split()) < 5:
             continue
         if _is_title_or_metadata_line(content):

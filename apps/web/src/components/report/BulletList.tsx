@@ -1,5 +1,6 @@
 import type { BulletAnalysis } from "@/types/analysis";
 import { scoreColor } from "@/lib/score-color";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 export function BulletList({ bullets }: { bullets: BulletAnalysis[] }) {
   return (
@@ -12,9 +13,25 @@ export function BulletList({ bullets }: { bullets: BulletAnalysis[] }) {
           <div key={i} className="border-l-2 pl-4" style={{ borderColor: scoreColor(bullet.score) }}>
             <p className="text-sm">{bullet.text}</p>
             <div className="flex gap-3 mt-1.5 text-xs text-[var(--color-muted)]">
-              <span style={{ color: scoreColor(bullet.score) }}>{bullet.score}/100</span>
-              <span>{bullet.has_action_verb ? "✓ action verb" : "✗ no action verb"}</span>
-              <span>{bullet.has_metric ? "✓ has metric" : "✗ no metric"}</span>
+              <span style={{ color: scoreColor(bullet.score) }} className="font-[var(--font-mono)]">
+                {bullet.score}/100
+              </span>
+              <span className="flex items-center gap-1">
+                {bullet.has_action_verb ? (
+                  <CheckCircle2 size={13} className="text-[var(--color-diagnostic-green)]" />
+                ) : (
+                  <XCircle size={13} className="text-[var(--color-diagnostic-red)]" />
+                )}
+                action verb
+              </span>
+              <span className="flex items-center gap-1">
+                {bullet.has_metric ? (
+                  <CheckCircle2 size={13} className="text-[var(--color-diagnostic-green)]" />
+                ) : (
+                  <XCircle size={13} className="text-[var(--color-diagnostic-red)]" />
+                )}
+                metric
+              </span>
             </div>
             {bullet.issues.length > 0 && (
               <ul className="mt-1">

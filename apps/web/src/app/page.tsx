@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { uploadAndAnalyze, ApiError } from "@/lib/api";
 import { ReportView } from "@/components/report/ReportView";
 import type { AnalysisResult } from "@/types/analysis";
+import { UploadCloud } from "lucide-react";
 
 const ACCEPTED_TYPES = [".pdf", ".docx", ".txt"];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024;
@@ -63,9 +64,15 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col items-center px-6 py-16 gap-10">
       <div className="text-center">
-        <h1 className="text-3xl font-semibold tracking-tight">ResumeLint</h1>
-        <p className="text-[var(--color-muted)] mt-1">The engineering-grade resume linter.</p>
-      </div>
+  <div className="inline-flex items-center gap-2 mb-1">
+    <div className="w-2 h-2 rounded-full bg-[var(--color-diagnostic-green)]" />
+    <span className="text-xs uppercase tracking-wider text-[var(--color-muted)]">
+      v0.1 · MVP
+    </span>
+  </div>
+  <h1 className="text-3xl font-semibold tracking-tight">ResumeLint</h1>
+  <p className="text-[var(--color-muted)] mt-1">The engineering-grade resume linter.</p>
+</div>
 
       <div
         onDragOver={(e) => {
@@ -80,17 +87,18 @@ export default function HomePage() {
             : "border-[var(--color-steel)] bg-[var(--color-graphite)]"
         }`}
       >
-        <p className="mb-4">Drag & drop your resume here</p>
-        <p className="text-sm text-[var(--color-muted)] mb-4">PDF, DOCX, or TXT — up to 5 MB</p>
-        <label className="inline-block cursor-pointer border border-[var(--color-steel)] rounded-[var(--radius-sharp)] px-4 py-2 hover:border-[var(--color-accent-orange)] transition-colors">
-          <span>Browse files</span>
-          <input
-            type="file"
-            accept={ACCEPTED_TYPES.join(",")}
-            onChange={onFileInput}
-            className="hidden"
-          />
-        </label>
+        <UploadCloud className="mx-auto mb-3 text-[var(--color-muted)]" size={28} />
+<p className="mb-4">Drag & drop your resume here</p>
+<p className="text-sm text-[var(--color-muted)] mb-4">PDF, DOCX, or TXT — up to 5 MB</p>
+<label className="inline-block cursor-pointer border border-[var(--color-steel)] rounded-[var(--radius-sharp)] px-4 py-2 hover:border-[var(--color-accent-orange)] hover:bg-[var(--color-slate)] transition-colors">
+  <span>Browse files</span>
+  <input
+    type="file"
+    accept={ACCEPTED_TYPES.join(",")}
+    onChange={onFileInput}
+    className="hidden"
+  />
+</label>
       </div>
 
       {status === "uploading" && (

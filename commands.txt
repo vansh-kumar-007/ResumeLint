@@ -1,0 +1,9 @@
+# Terminal 1
+conda activate resumelint
+cd D:\code\resumelint\apps\api
+uvicorn src.main:app --reload
+
+# Terminal 2
+cd D:\code\resumelint\apps\web
+pnpm dev
+

@@ -27,15 +27,24 @@ def split_into_bullets(section_text: str) -> list[str]:
     buffer = ""
     for line in raw_lines:
         clean_line = line[1:].strip() if line.startswith("•") else line
+
         if not buffer:
             buffer = clean_line
-        elif buffer[-1:] not in ".!?" and not _is_title_or_metadata_line(clean_line):
-            # Previous line didn't end a sentence — this line is a wrapped
-            # continuation of it, not a new bullet.
+            continue
+
+        # Title/metadata lines are always standalone units — never merge
+        # into them, and never treat them as an unterminated continuation.
+        if _is_title_or_metadata_line(buffer):
+            merged.append(buffer)
+            buffer = clean_line
+            continue
+
+        if buffer[-1:] not in ".!?" and not _is_title_or_metadata_line(clean_line):
             buffer = f"{buffer} {clean_line}"
         else:
             merged.append(buffer)
             buffer = clean_line
+
     if buffer:
         merged.append(buffer)
 

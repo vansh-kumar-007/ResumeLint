@@ -13,6 +13,8 @@ from src.infrastructure.db.models import Resume
 from src.infrastructure.db.session import get_db
 from src.infrastructure.parsing.file_validation import validate_file
 from src.infrastructure.storage import storage_backend
+from src.api.schemas.suggestions import SuggestionsResponse
+from src.application.ats_engine.generate_suggestions import ScoreReportNotFoundError, generate_suggestions
 
 router = APIRouter(prefix="/resumes", tags=["resumes"])
 
@@ -89,3 +91,13 @@ async def analyze_resume_endpoint(resume_id: str, db: AsyncSession = Depends(get
         raise HTTPException(status_code=422, detail=str(e))
 
     return result
+
+@router.post("/{resume_id}/suggestions", response_model=SuggestionsResponse)
+async def suggestions_endpoint(resume_id: str, db: AsyncSession = Depends(get_db)):
+    try:
+        result = await generate_suggestions(resume_id, db)
+    except ScoreReportNotFoundError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+
+    return result
+

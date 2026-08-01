@@ -5,45 +5,12 @@
   --foreground: #171717;
 }
 
-@theme {
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-border: #e2e8f0;
-  --color-text: #0f172a;
-  --color-muted: #64748b;
-  --color-indigo: #6366f1;
-  --color-indigo-soft: #eef2ff;
-  --color-cyan: #06b6d4;
-  --color-success: #10b981;
-  --color-success-soft: #ecfdf5;
-  --color-warning: #f59e0b;
-  --color-warning-soft: #fffbeb;
-  --color-danger: #ef4444;
-  --color-danger-soft: #fef2f2;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
-
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-}
-
-.card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.03);
-}
-
-.pill {
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.2rem 0.65rem;
-  border-radius: 999px;
-}
-.pill-success { background: var(--color-success-soft); color: var(--color-success); }
-.pill-warning { background: var(--color-warning-soft); color: var(--color-warning); }
-.pill-danger { background: var(--color-danger-soft); color: var(--color-danger); }
-.pill-indigo { background: var(--color-indigo-soft); color: var(--color-indigo); }
 
 @media (prefers-color-scheme: dark) {
   :root {

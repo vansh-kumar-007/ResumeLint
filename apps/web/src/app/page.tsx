@@ -1,103 +1,64 @@
-"use client";
+import Image from "next/image";
 
-import { useState, useCallback } from "react";
-import { motion } from "framer-motion";
-import { uploadAndAnalyze, ApiError } from "@/lib/api";
-import { ReportView } from "@/components/report/ReportView";
-import type { AnalysisResult } from "@/types/analysis";
-import { UploadCloud, FileSearch } from "lucide-react";
-
-const ACCEPTED_TYPES = [".pdf", ".docx", ".txt"];
-const MAX_SIZE_BYTES = 5 * 1024 * 1024;
-
-export default function HomePage() {
-  const [isDragging, setIsDragging] = useState(false);
-  const [status, setStatus] = useState<"idle" | "uploading" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [result, setResult] = useState<AnalysisResult | null>(null);
-
-  const handleFile = useCallback(async (file: File) => {
-    const ext = "." + file.name.split(".").pop()?.toLowerCase();
-    if (!ACCEPTED_TYPES.includes(ext)) {
-      setStatus("error");
-      setErrorMessage(`Unsupported file type. Allowed: ${ACCEPTED_TYPES.join(", ")}`);
-      return;
-    }
-    if (file.size > MAX_SIZE_BYTES) {
-      setStatus("error");
-      setErrorMessage("File exceeds the 5 MB limit.");
-      return;
-    }
-    setStatus("uploading");
-    setErrorMessage(null);
-    setResult(null);
-    try {
-      const analysis = await uploadAndAnalyze(file);
-      setResult(analysis);
-      setStatus("idle");
-    } catch (err) {
-      setStatus("error");
-      setErrorMessage(err instanceof ApiError ? err.message : "Something went wrong.");
-    }
-  }, []);
-
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  }, [handleFile]);
-
-  const onFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFile(file);
-  }, [handleFile]);
-
+export default function Home() {
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-indigo)] to-[var(--color-cyan)] flex items-center justify-center">
-            <FileSearch size={16} className="text-white" />
-          </div>
-          <span className="font-semibold">ResumeLint</span>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 py-12 flex flex-col items-center gap-8">
-        {!result && (
-          <>
-            <div className="text-center max-w-lg">
-              <h1 className="text-3xl font-bold tracking-tight mb-2">Analyze your resume</h1>
-              <p className="text-[var(--color-muted)]">
-                Deterministic ATS scoring with AI-assisted rewrite suggestions.
-              </p>
-            </div>
-
-            <motion.div
-              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={onDrop}
-              animate={{ scale: isDragging ? 1.02 : 1 }}
-              className={`w-full max-w-lg card border-dashed p-10 text-center ${
-                isDragging ? "border-[var(--color-indigo)] bg-[var(--color-indigo-soft)]" : ""
-              }`}
+    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <Image
+          className="dark:invert"
+          src="/next.svg"
+          alt="Next.js logo"
+          width={100}
+          height={20}
+          priority
+        />
+        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
+          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+            To get started, edit the page.tsx file.
+          </h1>
+          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+            Looking for a starting point or more instructions? Head over to{" "}
+            <a
+              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
             >
-              <UploadCloud className="mx-auto mb-3 text-[var(--color-indigo)]" size={26} />
-              <p className="text-sm mb-1">Drag & drop your resume</p>
-              <p className="text-xs text-[var(--color-muted)] mb-4">PDF, DOCX, or TXT — up to 5 MB</p>
-              <label className="inline-block cursor-pointer bg-[var(--color-indigo)] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-indigo-600 transition-colors">
-                Browse files
-                <input type="file" accept={ACCEPTED_TYPES.join(",")} onChange={onFileInput} className="hidden" />
-              </label>
-            </motion.div>
-          </>
-        )}
-
-        {status === "uploading" && <p className="text-sm text-[var(--color-indigo)]">Analyzing your resume…</p>}
-        {status === "error" && errorMessage && <p className="text-sm text-[var(--color-danger)]">{errorMessage}</p>}
-
-        {result && <ReportView result={result} />}
+              Templates
+            </a>{" "}
+            or the{" "}
+            <a
+              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+              className="font-medium text-zinc-950 dark:text-zinc-50"
+            >
+              Learning
+            </a>{" "}
+            center.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+          <a
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className="dark:invert"
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={16}
+              height={16}
+            />
+            Deploy Now
+          </a>
+          <a
+            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
+        </div>
       </main>
     </div>
   );

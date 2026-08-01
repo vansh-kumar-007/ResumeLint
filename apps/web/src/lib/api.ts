@@ -51,3 +51,14 @@ export async function uploadAndAnalyze(
   const { id } = await uploadResume(file);
   return analyzeResume(id);
 }
+
+import type { SuggestionsResult } from "@/types/suggestions";
+
+export async function fetchSuggestions(resumeId: string): Promise<SuggestionsResult> {
+  const res = await fetch(`${API_URL}/resumes/${resumeId}/suggestions`, { method: "POST" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new ApiError(body?.detail ?? "Suggestions failed", res.status);
+  }
+  return res.json();
+}

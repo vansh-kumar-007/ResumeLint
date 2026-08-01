@@ -9,19 +9,25 @@ export function ContactCard({ contact }: { contact: ContactInfo }) {
     [Link2, "LinkedIn", contact.linkedin_url ?? (contact.has_linkedin_mention ? "mentioned, link not detected" : null)],
     [Link2, "GitHub", contact.github_url ?? (contact.has_github_mention ? "mentioned, link not detected" : null)],
   ];
+  const allDetected = rows.every(([, , value]) => value !== null);
 
   return (
-    <div className="neu-panel">
-      <h2 className="text-xs uppercase tracking-wider font-bold mb-4">Detected Contact Info</h2>
-      <div className="space-y-2.5">
+    <div className="card p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold">Detected Contact Info</h2>
+        <span className={`pill ${allDetected ? "pill-success" : "pill-warning"}`}>
+          {allDetected ? "Complete" : "Incomplete"}
+        </span>
+      </div>
+      <div className="space-y-3">
         {rows.map(([Icon, label, value]) => (
           <div key={label} className="flex items-center gap-3 text-sm">
-            <Icon size={15} className="flex-shrink-0" />
+            <Icon size={16} className="text-[var(--color-muted)] flex-shrink-0" />
             <span className="text-[var(--color-muted)] w-16 flex-shrink-0">{label}</span>
             {value ? (
-              <span className="truncate font-mono">{value}</span>
+              <span className="truncate">{value}</span>
             ) : (
-              <span className="flex items-center gap-1 text-[var(--color-diagnostic-red)] font-bold">
+              <span className="flex items-center gap-1 text-[var(--color-danger)]">
                 <XCircle size={13} />
                 Not detected
               </span>

@@ -56,7 +56,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-2">
+        <div className="max-w-[1400px] mx-auto px-8 h-16 flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-indigo)] to-[var(--color-cyan)] flex items-center justify-center">
             <FileSearch size={16} className="text-white" />
           </div>
@@ -64,7 +64,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12 flex flex-col items-center gap-8">
+      <main className="max-w-[1400px] mx-auto px-8 py-10 flex flex-col items-center gap-6">
         {!result && (
           <>
             <div className="text-center max-w-lg">

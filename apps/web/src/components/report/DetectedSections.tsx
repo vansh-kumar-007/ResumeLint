@@ -18,7 +18,7 @@ export function DetectedSections({ sections }: { sections: Record<string, string
   const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
-    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm p-6">
+    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm p-5">
       <h2 className="text-sm font-semibold mb-3">Detected Sections ({Object.keys(sections).length})</h2>
       <div className="space-y-1">
         {Object.entries(sections).map(([key, content]) => (

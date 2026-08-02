@@ -12,8 +12,8 @@ export function ContactCard({ contact }: { contact: ContactInfo }) {
   const allDetected = rows.every(([, , value]) => value !== null);
 
   return (
-    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm p-5">
+      <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold">Detected Contact Info</h2>
         <span
           className="text-[10px] font-semibold px-2.5 py-1 rounded-full"

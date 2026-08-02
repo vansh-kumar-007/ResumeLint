@@ -4,7 +4,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 
 export function BulletList({ bullets }: { bullets: BulletAnalysis[] }) {
   return (
-    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm p-6">
+    <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-sm p-5">
       <h2 className="text-sm font-semibold mb-4">Bullet-by-Bullet Analysis</h2>
       <div className="space-y-3">
         {bullets.map((bullet, i) => (
